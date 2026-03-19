@@ -1,0 +1,99 @@
+/* center canvas */
+body {
+    margin: 0;
+    background: url('back.jpg') center/cover no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    color: #fff;
+    font-family: sans-serif;
+}
+canvas {
+    background: transparent;
+    display: block;
+}
+
+#menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.75);
+    color: #fff;
+}
+
+#titleImage {
+    margin-bottom: 20px;
+    max-width: 1000px;
+    width: 80%;
+    height: auto;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+}
+
+#menu h1 {
+    margin-bottom: 20px;
+    font-size: 72px;
+    color: #2d5c1e;
+    text-shadow: 
+        0 2px 0 #234a18,
+        0 4px 0 #1a3812,
+        0 6px 8px rgba(0,0,0,0.6),
+        inset 0 -3px 5px rgba(255,255,255,0.3),
+        0 8px 0 #0f2408,
+        0 10px 10px rgba(0,0,0,0.4);
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-family: 'Impact', 'Arial Black', sans-serif;
+    filter: drop-shadow(0 0 3px rgba(100,180,70,0.5));
+    background: linear-gradient(180deg, #4a7d35 0%, #2d5c1e 50%, #1a3812 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+#menu .buttons {
+    margin: 10px 0;
+}
+
+#menu button {
+    margin: 0 5px;
+    padding: 30px 60px;
+    font-size: 36px;
+    cursor: pointer;
+    background: url('button.png');
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    border-radius: 0;
+    min-width: 240px;
+    transition: transform 0.2s, filter 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#menu button:hover {
+    transform: scale(1.05);
+    filter: brightness(1.2);
+}
+
+#menu button:active {
+    transform: scale(0.98);
+}
+
+#menu.hidden {
+    display: none;
+}

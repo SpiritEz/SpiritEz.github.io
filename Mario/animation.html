@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Walking Animation</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .scene {
+            width: 80vh;
+            height: 80vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bg-scroll {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 300%;
+            background-image: url('taust.JPG'), url('taust.JPG'), url('taust.JPG');
+            background-size: 33.33% 100%;
+            background-repeat: no-repeat;
+            background-position: 0% 0%, 33.33% 0%, 66.66% 0%;
+            z-index: 0;
+        }
+
+        .cloud-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 52%;
+            overflow: hidden;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .cloud {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.9;
+        }
+
+        .cloud.small {
+            width: 220px;
+            height: 118px;
+            background-image: url('smallc.png');
+        }
+
+        .cloud.big {
+            width: 250px;
+            height: 134px;
+            background-image: url('bigc.png');
+        }
+
+        .container {
+            text-align: center;
+            position: absolute;
+            bottom: 11.1%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            transition: none;
+        }
+
+        .container.behind-pipe {
+            z-index: 1;
+        }
+
+        .container.hidden {
+            opacity: 0;
+        }
+
+        .character {
+            width: 128px;
+            height: 128px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin: 0 auto;
+            background-image: url('chill.png');
+        }
+
+        .pipe {
+            position: absolute;
+            bottom: 13%;
+            width: 180px;
+            height: 130px;
+            background-image: url('post.png');
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-position: bottom center;
+            z-index: 2;
+        }
+
+        .enemy-layer,
+        .item-layer,
+        .platform-layer {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .platform {
+            position: absolute;
+            display: flex;
+            gap: 0;
+            height: 52px;
+        }
+
+        .platform-tile {
+            width: 52px;
+            height: 52px;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.25));
+        }
+
+        .platform-tile.block {
+            background-image: url('block.png');
+        }
+
+        .platform-tile.luck {
+            background-image: url('luck.png');
+        }
+
+        .platform-tile.luck.used {
+            background-image: url('block.png');
+            filter: brightness(0.85) drop-shadow(0 3px 5px rgba(0, 0, 0, 0.25));
+        }
+
+        .platform-tile.tellis {
+            background-image: url('tellis.png');
+        }
+
+        .mushroom {
+            position: absolute;
+            bottom: 11.1%;
+            width: 86px;
+            height: 86px;
+            background-image: url('seentava.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: bottom center;
+            z-index: 2;
+        }
+
+        .mushroom.hidden {
+            opacity: 0;
+        }
+
+        .burger {
+            position: absolute;
+            bottom: 15.5%;
+            width: 64px;
+            height: 64px;
+            background-image: url('burgir.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .burger.hidden {
+            opacity: 0;
+        }
+
+        .finish-screen {
+            position: absolute;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 5;
+        }
+
+        .finish-screen.show {
+            display: flex;
+        }
+
+        .finish-card {
+            min-width: 280px;
+            padding: 24px 28px;
+            background: rgba(21, 20, 17, 0.92);
+            border: 2px solid rgba(255, 248, 106, 0.5);
+            border-radius: 16px;
+            text-align: center;
+            color: #fff;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+        }
+
+        .finish-title {
+            color: #fff86a;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-shadow: 2px 2px 3px #000;
+        }
+
+        .finish-stats {
+            font-size: 15px;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .finish-help {
+            font-size: 14px;
+            color: #ddd;
+        }
+
+        .level-message {
+            position: absolute;
+            top: 18px;
+            width: 100%;
+            text-align: center;
+            color: #fff86a;
+            text-shadow: 2px 2px 3px #000;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            z-index: 3;
+            display: none;
+        }
+
+        .level-message.show {
+            display: block;
+        }
+
+        .hud {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            display: flex;
+            gap: 14px;
+            padding: 10px 12px;
+            background: rgba(0, 0, 0, 0.45);
+            color: #fff;
+            text-shadow: 1px 1px 2px #000;
+            font-size: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            z-index: 4;
+        }
+
+        .restart-hint {
+            position: absolute;
+            top: 54px;
+            width: 100%;
+            text-align: center;
+            color: #fff;
+            text-shadow: 1px 1px 2px #000;
+            font-size: 14px;
+            z-index: 4;
+            display: none;
+        }
+
+        .restart-hint.show {
+            display: block;
+        }
+
+        .hint {
+            position: absolute;
+            bottom: 8px;
+            width: 100%;
+            text-align: center;
+            color: #fff;
+            text-shadow: 1px 1px 3px #000;
+            font-size: 13px;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body>
+    <div class="scene">
+        <div class="bg-scroll" id="bg"></div>
+        <div class="cloud-layer" id="cloudLayer"></div>
+        <div class="pipe" id="pipe"></div>
+        <div class="enemy-layer" id="enemyLayer"></div>
+        <div class="item-layer" id="itemLayer">
+            <div class="burger" id="burger"></div>
+            <div class="burger" id="burger2"></div>
+            <div class="burger" id="blockBurger"></div>
+        </div>
+        <div class="platform-layer" id="platformLayer">
+            <div class="platform" id="platform1">
+                <div class="platform-tile block"></div>
+                <div class="platform-tile luck" id="luckBlock"></div>
+                <div class="platform-tile tellis"></div>
+                <div class="platform-tile block"></div>
+            </div>
+            <div class="platform" id="platform2">
+                <div class="platform-tile tellis"></div>
+                <div class="platform-tile block"></div>
+                <div class="platform-tile block"></div>
+            </div>
+        </div>
+        <div class="hud" id="hud">
+            <span id="livesStat">Lives: 1</span>
+            <span id="burgerStat">Burgers: 0</span>
+            <span id="mushroomStat">Mushrooms: 0</span>
+        </div>
+        <div class="restart-hint" id="restartHint">Press R to restart</div>
+        <div class="finish-screen" id="finishScreen">
+            <div class="finish-card">
+                <div class="finish-title">Level Complete</div>
+                <div class="finish-stats" id="finishStats">Burgers: 0<br>Mushrooms: 0</div>
+                <div class="finish-help">Press R to play again</div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="character" id="character"></div>
+        </div>
+        <div class="level-message" id="levelMessage">you complited the level</div>
+        <div class="hint">A / ← = left &nbsp;|&nbsp; D / → = right &nbsp;|&nbsp; Space / ↑ = jump</div>
+    </div>
+
+    <script>
+        const character = document.getElementById('character');
+        const bg = document.getElementById('bg');
+        const scene = document.querySelector('.scene');
+        const cloudLayer = document.getElementById('cloudLayer');
+        const pipe = document.getElementById('pipe');
+        const enemyLayer = document.getElementById('enemyLayer');
+        const burger = document.getElementById('burger');
+        const burger2 = document.getElementById('burger2');
+        const blockBurger = document.getElementById('blockBurger');
+        const finishScreen = document.getElementById('finishScreen');
+        const finishStats = document.getElementById('finishStats');
+        const livesStat = document.getElementById('livesStat');
+        const burgerStat = document.getElementById('burgerStat');
+        const mushroomStat = document.getElementById('mushroomStat');
+        const restartHint = document.getElementById('restartHint');
+        const levelMessage = document.getElementById('levelMessage');
+        const container = document.querySelector('.container');
+        const platform1 = document.getElementById('platform1');
+        const platform2 = document.getElementById('platform2');
+        const luckBlock = document.getElementById('luckBlock');
+
+        const walkFrames = ['kond1.png', 'kond2.png', 'kond3.png'];
+        const frameInterval = 150;
+        const scrollSpeed = 2;
+
+        const groundBottom = 11.1;
+        const jumpStrength = -15;
+        const gravity = 0.6;
+        const characterWidth = 128;
+        const characterHeight = 128;
+        const pipeWidth = 180;
+        const pipeHeight = 130;
+        const pipeCenterTolerance = 24;
+        const pipeSinkSpeed = 1.1;
+        const pipeSinkEndY = 0;
+        const playerDeathSinkSpeed = 2.8;
+        const playerDeathEndY = -150;
+        const mushroomWidth = 86;
+        const mushroomHeight = 86;
+        const mushroomSightRange = 250;
+        const mushroomChaseSpeed = 1.15;
+        const mushroomWalkFlipInterval = 600;
+        const mushroomDeathSinkSpeed = 2.8;
+        const mushroomDeathEndY = -120;
+        const burgerWidth = 64;
+        const burgerHeight = 64;
+        const tileSize = 52;
+        const charHeadOffset = 92;
+        const platformSupportOverlap = 26;
+        const cloudCount = 4;
+        const cloudParallax = 0.35;
+        const minCloudGapX = 170;
+        const minCloudGapY = 38;
+
+        let bgX = 0;
+        let frameIndex = 0;
+        let frameTimer = 0;
+        let lastTime = null;
+        let moving = false;
+        let direction = 0;
+
+        let jumping = false;
+        let velY = 0;
+        let charY = 0;
+        let onPipe = false;
+        let pipeDescending = false;
+        let pipeStandTime = 0;
+        let enteredPipe = false;
+        let playerDying = false;
+        let playerDead = false;
+        let playerGone = false;
+        let levelCompleted = false;
+        let pipeX = 0;
+        let burgerX = 0;
+        let burgerY = 24;
+        let burger2X = 0;
+        let burger2Y = 0;
+        let blockBurgerX = 0;
+        let blockBurgerY = 0;
+        let burgerCollected = false;
+        let burger2Collected = false;
+        let blockBurgerVisible = false;
+        let blockBurgerCollected = false;
+        let lives = 1;
+        let burgersCount = 0;
+        let mushroomsDefeated = 0;
+        let onPlatformIndex = -1;
+        let luckBlockUsed = false;
+
+        const clouds = [];
+        const mushrooms = [];
+        const platforms = [
+            { el: platform1, x: 0, y: 86, width: tileSize * 4, height: tileSize },
+            { el: platform2, x: 0, y: 148, width: tileSize * 3, height: tileSize }
+        ];
+        const keys = { a: false, d: false };
+
+        function showMessage(text) {
+            levelMessage.textContent = text;
+            levelMessage.classList.add('show');
+        }
+
+        function hideMessage() {
+            levelMessage.classList.remove('show');
+        }
+
+        function updateHud() {
+            livesStat.textContent = `Lives: ${lives}`;
+            burgerStat.textContent = `Burgers: ${burgersCount}`;
+            mushroomStat.textContent = `Mushrooms: ${mushroomsDefeated}`;
+        }
+
+        function setRestartVisible(visible) {
+            restartHint.classList.toggle('show', visible);
+        }
+
+        function updateFinishScreen() {
+            finishStats.innerHTML = `Burgers: ${burgersCount}<br>Mushrooms: ${mushroomsDefeated}`;
+        }
+
+        function setFinishVisible(visible) {
+            finishScreen.classList.toggle('show', visible);
+            updateFinishScreen();
+        }
+
+        document.addEventListener('keydown', e => {
+            if ((e.key === 'r' || e.key === 'R') && (playerDead || playerGone || enteredPipe || levelCompleted)) {
+                resetLevel();
+                return;
+            }
+            if (enteredPipe || playerDead || playerGone) return;
+            if (e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft') keys.a = true;
+            if (e.key === 'd' || e.key === 'D' || e.key === 'ArrowRight') keys.d = true;
+            if ((e.key === ' ' || e.key === 'ArrowUp') && !jumping && !pipeDescending) {
+                jumping = true;
+                onPipe = false;
+                onPlatformIndex = -1;
+                pipeStandTime = 0;
+                velY = jumpStrength;
+                e.preventDefault();
+            }
+        });
+
+        document.addEventListener('keyup', e => {
+            if (enteredPipe || playerDead || playerGone) return;
+            if (e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft') keys.a = false;
+            if (e.key === 'd' || e.key === 'D' || e.key === 'ArrowRight') keys.d = false;
+        });
+
+        function isCloudTooClose(x, y, ignoreCloud = null) {
+            for (let i = 0; i < clouds.length; i += 1) {
+                const other = clouds[i];
+                if (other === ignoreCloud) continue;
+                const dx = Math.abs(other.x - x);
+                const dy = Math.abs(other.y - y);
+                if (dx < minCloudGapX && dy < minCloudGapY) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function makeCloud() {
+            const type = Math.random() < 0.55 ? 'small' : 'big';
+            const el = document.createElement('div');
+            el.className = `cloud ${type}`;
+            cloudLayer.appendChild(el);
+
+            const sceneW = scene.offsetWidth;
+            const maxY = Math.max(20, cloudLayer.offsetHeight - (type === 'big' ? 134 : 118));
+            let x = Math.random() * (sceneW * 2) - (sceneW * 0.5);
+            let y = Math.random() * maxY;
+
+            for (let i = 0; i < 20 && isCloudTooClose(x, y); i += 1) {
+                x = Math.random() * (sceneW * 2) - (sceneW * 0.5);
+                y = Math.random() * maxY;
+            }
+
+            const cloud = { el, type, x, y, speed: 0.7 + Math.random() * 0.8 };
+            clouds.push(cloud);
+            drawCloud(cloud);
+        }
+
+        function respawnCloud(cloud, side) {
+            cloud.type = Math.random() < 0.55 ? 'small' : 'big';
+            cloud.el.className = `cloud ${cloud.type}`;
+
+            const sceneW = scene.offsetWidth;
+            const cloudW = cloud.type === 'big' ? 250 : 220;
+            const cloudH = cloud.type === 'big' ? 134 : 118;
+            const maxY = Math.max(20, cloudLayer.offsetHeight - cloudH);
+            let x = side === 'right' ? sceneW + Math.random() * sceneW : -cloudW - Math.random() * sceneW;
+            let y = Math.random() * maxY;
+
+            for (let i = 0; i < 20 && isCloudTooClose(x, y, cloud); i += 1) {
+                x = side === 'right' ? sceneW + Math.random() * sceneW : -cloudW - Math.random() * sceneW;
+                y = Math.random() * maxY;
+            }
+
+            cloud.x = x;
+            cloud.y = y;
+            cloud.speed = 0.7 + Math.random() * 0.8;
+            drawCloud(cloud);
+        }
+
+        function drawCloud(cloud) {
+            cloud.el.style.transform = `translate(${cloud.x}px, ${cloud.y}px)`;
+        }
+
+        function createMushrooms() {
+            for (let i = 0; i < 4; i += 1) {
+                const el = document.createElement('div');
+                el.className = 'mushroom';
+                enemyLayer.appendChild(el);
+                mushrooms.push({
+                    el,
+                    x: 0,
+                    y: 0,
+                    state: 'idle',
+                    facing: 1,
+                    walkTimer: 0,
+                    walkFlip: false,
+                    spawnDrop: false,
+                    dead: false,
+                    gone: false
+                });
+            }
+        }
+
+        function placePipe() {
+            const sceneW = scene.offsetWidth;
+            platforms[0].x = (sceneW / 2) + 420;
+            platforms[1].x = (sceneW / 2) + 760;
+
+            pipeX = (sceneW / 2) + 980;
+            pipe.style.left = `${pipeX}px`;
+        }
+
+        function placeLevelObjects() {
+            const sceneW = scene.offsetWidth;
+            platforms[0].x = (sceneW / 2) + 420;
+            platforms[1].x = (sceneW / 2) + 760;
+
+            const mushroomPositions = [
+                (sceneW / 2) + 260,
+                (sceneW / 2) + 560,
+                pipeX - mushroomWidth - 36
+            ];
+
+            for (let i = 0; i < mushrooms.length; i += 1) {
+                const mushroom = mushrooms[i];
+                mushroom.x = mushroomPositions[i] || 0;
+                mushroom.y = 0;
+                mushroom.state = 'idle';
+                mushroom.facing = 1;
+                mushroom.walkTimer = 0;
+                mushroom.walkFlip = false;
+                mushroom.spawnDrop = false;
+                mushroom.dead = false;
+                mushroom.gone = i >= mushroomPositions.length;
+            }
+
+            burgerX = (sceneW / 2) + 730;
+            burgerY = 24;
+            burger2X = platforms[1].x + 46;
+            burger2Y = platforms[1].y + platforms[1].height + 18;
+            blockBurgerX = platforms[0].x + tileSize + 2;
+            blockBurgerY = platforms[0].y + tileSize + 18;
+
+            burgerCollected = false;
+            burger2Collected = false;
+            blockBurgerVisible = false;
+            blockBurgerCollected = false;
+            luckBlockUsed = false;
+            luckBlock.classList.remove('used');
+        }
+
+        function updatePlatformVisual(platform) {
+            platform.el.style.left = `${platform.x}px`;
+            platform.el.style.bottom = `calc(${groundBottom}% + ${platform.y}px)`;
+            platform.el.style.width = `${platform.width}px`;
+            platform.el.style.height = `${platform.height}px`;
+        }
+
+        function updateMushroomVisual(mushroom) {
+            let sprite = 'seentava.png';
+            let scaleX = 1;
+
+            if (mushroom.dead) {
+                sprite = 'seendead.png';
+            } else if (mushroom.state === 'chase') {
+                sprite = 'seenkond.png';
+                scaleX = mushroom.facing * (mushroom.walkFlip ? -1 : 1);
+            }
+
+            mushroom.el.style.backgroundImage = `url('${sprite}')`;
+            mushroom.el.style.transform = `scaleX(${scaleX})`;
+            mushroom.el.style.left = `${mushroom.x}px`;
+            mushroom.el.style.bottom = `calc(${groundBottom}% + ${mushroom.y}px)`;
+            mushroom.el.classList.toggle('hidden', mushroom.gone);
+        }
+
+        function updateBurgerVisual() {
+            burger.style.left = `${burgerX}px`;
+            burger.style.bottom = `calc(${groundBottom}% + ${burgerY}px)`;
+            burger.classList.toggle('hidden', burgerCollected);
+
+            burger2.style.left = `${burger2X}px`;
+            burger2.style.bottom = `calc(${groundBottom}% + ${burger2Y}px)`;
+            burger2.classList.toggle('hidden', burger2Collected);
+
+            blockBurger.style.left = `${blockBurgerX}px`;
+            blockBurger.style.bottom = `calc(${groundBottom}% + ${blockBurgerY}px)`;
+            blockBurger.classList.toggle('hidden', !blockBurgerVisible || blockBurgerCollected);
+        }
+
+        function triggerGameOver() {
+            if (playerDead || playerGone || enteredPipe) return;
+            lives = 0;
+            playerDead = true;
+            playerDying = true;
+            jumping = false;
+            onPipe = false;
+            pipeDescending = false;
+            pipeStandTime = 0;
+            keys.a = false;
+            keys.d = false;
+            character.style.backgroundImage = "url('dead.png')";
+            showMessage('game over');
+            setRestartVisible(true);
+            setFinishVisible(false);
+            updateHud();
+        }
+
+        function resetLevel() {
+            bgX = 0;
+            frameIndex = 0;
+            frameTimer = 0;
+            moving = false;
+            direction = 0;
+
+            jumping = false;
+            velY = 0;
+            charY = 0;
+            onPipe = false;
+            onPlatformIndex = -1;
+            pipeDescending = false;
+            pipeStandTime = 0;
+            enteredPipe = false;
+            playerDying = false;
+            playerDead = false;
+            playerGone = false;
+            levelCompleted = false;
+            lives = 1;
+            burgersCount = 0;
+            mushroomsDefeated = 0;
+            keys.a = false;
+            keys.d = false;
+
+            bg.style.transform = 'translateX(0px)';
+            placePipe();
+            placeLevelObjects();
+            hideMessage();
+            setRestartVisible(false);
+            setFinishVisible(false);
+            container.classList.remove('behind-pipe', 'hidden');
+            character.style.backgroundImage = "url('chill.png')";
+            character.style.transform = 'scaleX(1)';
+            updateHud();
+
+            for (let i = 0; i < platforms.length; i += 1) {
+                updatePlatformVisual(platforms[i]);
+            }
+            for (let i = 0; i < mushrooms.length; i += 1) {
+                updateMushroomVisual(mushrooms[i]);
+            }
+            updateBurgerVisual();
+        }
+
+        for (let i = 0; i < cloudCount; i += 1) {
+            makeCloud();
+        }
+
+        createMushrooms();
+        placePipe();
+        placeLevelObjects();
+        updateHud();
+        for (let i = 0; i < platforms.length; i += 1) {
+            updatePlatformVisual(platforms[i]);
+        }
+        for (let i = 0; i < mushrooms.length; i += 1) {
+            updateMushroomVisual(mushrooms[i]);
+        }
+        updateBurgerVisual();
+
+        function loop(timestamp) {
+            if (!lastTime) lastTime = timestamp;
+            const dt = timestamp - lastTime;
+            lastTime = timestamp;
+            const sceneW = scene.offsetWidth;
+            const prevCharY = charY;
+
+            moving = keys.a || keys.d;
+            if (pipeDescending || enteredPipe || playerDead || playerGone) {
+                moving = false;
+            }
+
+            if (keys.d) direction = 1;
+            else if (keys.a) direction = -1;
+
+            if (jumping) {
+                velY += gravity;
+                charY -= velY;
+                if (charY <= 0) {
+                    charY = 0;
+                    velY = 0;
+                    jumping = false;
+                    onPipe = false;
+                    onPlatformIndex = -1;
+                    pipeStandTime = 0;
+                }
+            }
+
+            if (playerDying) {
+                charY -= playerDeathSinkSpeed;
+                if (charY <= playerDeathEndY) {
+                    charY = playerDeathEndY;
+                    playerDying = false;
+                    playerGone = true;
+                }
+            }
+
+            if (moving) {
+                const charLeftNow = (sceneW / 2) - (characterWidth / 2);
+                const charRightNow = charLeftNow + characterWidth;
+                const charBottomNow = charY;
+                const charTopNow = charY + characterHeight;
+                const pipeLeftNow = pipeX;
+                const pipeRightNow = pipeX + pipeWidth;
+                const nextPipeLeft = pipeX - (direction * scrollSpeed);
+                const nextPipeRight = nextPipeLeft + pipeWidth;
+                const verticalOverlapWithPipe = charBottomNow < (pipeHeight - 4) && charTopNow > 8;
+                const hitFromRight = direction === 1 && pipeLeftNow >= charRightNow && nextPipeLeft < charRightNow;
+                const hitFromLeft = direction === -1 && pipeRightNow <= charLeftNow && nextPipeRight > charLeftNow;
+                const blockByPipe = verticalOverlapWithPipe && (hitFromRight || hitFromLeft);
+
+                if (!blockByPipe) {
+                    const tileW = sceneW;
+                    bgX -= direction * scrollSpeed;
+                    if (bgX < -tileW) bgX += tileW;
+                    if (bgX > 0) bgX -= tileW;
+                    bg.style.transform = `translateX(${bgX}px)`;
+
+                    pipeX = nextPipeLeft;
+                    pipe.style.left = `${pipeX}px`;
+
+                    if (!burgerCollected) {
+                        burgerX -= direction * scrollSpeed;
+                    }
+                    if (!burger2Collected) {
+                        burger2X -= direction * scrollSpeed;
+                    }
+                    if (blockBurgerVisible && !blockBurgerCollected) {
+                        blockBurgerX -= direction * scrollSpeed;
+                    }
+
+                    for (let i = 0; i < platforms.length; i += 1) {
+                        platforms[i].x -= direction * scrollSpeed;
+                    }
+
+                    for (let i = 0; i < mushrooms.length; i += 1) {
+                        if (!mushrooms[i].gone) {
+                            mushrooms[i].x -= direction * scrollSpeed;
+                        }
+                    }
+
+                    for (let i = 0; i < clouds.length; i += 1) {
+                        const cloud = clouds[i];
+                        const cloudW = cloud.type === 'big' ? 250 : 220;
+                        cloud.x -= direction * scrollSpeed * cloudParallax * cloud.speed;
+                        if (cloud.x < -cloudW - 20) {
+                            respawnCloud(cloud, 'right');
+                        } else if (cloud.x > sceneW + 20) {
+                            respawnCloud(cloud, 'left');
+                        } else {
+                            drawCloud(cloud);
+                        }
+                    }
+                }
+            }
+
+            const charLeft = (sceneW / 2) - (characterWidth / 2);
+            const charRight = charLeft + characterWidth;
+            const charBottom = charY;
+            const charTop = charY + characterHeight;
+
+            if (!onPipe) {
+                if (onPlatformIndex !== -1) {
+                    const currentPlatform = platforms[onPlatformIndex];
+                    const currentTop = currentPlatform.y + currentPlatform.height;
+                    const currentOverlap = Math.min(charRight, currentPlatform.x + currentPlatform.width) - Math.max(charLeft, currentPlatform.x);
+                    if (currentOverlap > platformSupportOverlap) {
+                        charY = currentTop;
+                    } else {
+                        onPlatformIndex = -1;
+                        if (!jumping) {
+                            jumping = true;
+                            velY = 0;
+                        }
+                    }
+                }
+
+                if (!jumping && onPlatformIndex === -1) {
+                    for (let i = 0; i < platforms.length; i += 1) {
+                        const platform = platforms[i];
+                        const platformTop = platform.y + platform.height;
+                        const overlapWithPlatform = Math.min(charRight, platform.x + platform.width) - Math.max(charLeft, platform.x);
+                        const closeToPlatformTop = Math.abs(charY - platformTop) <= 8;
+                        if (overlapWithPlatform > platformSupportOverlap && closeToPlatformTop) {
+                            charY = platformTop;
+                            onPlatformIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                if (jumping && velY > 0 && onPlatformIndex === -1) {
+                    for (let i = 0; i < platforms.length; i += 1) {
+                        const platform = platforms[i];
+                        const platformTop = platform.y + platform.height;
+                        const overlapWithPlatform = Math.min(charRight, platform.x + platform.width) - Math.max(charLeft, platform.x);
+                        if (overlapWithPlatform > platformSupportOverlap && prevCharY >= (platformTop - 10) && charY <= (platformTop + 6)) {
+                            charY = platformTop;
+                            velY = 0;
+                            jumping = false;
+                            onPlatformIndex = i;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            for (let i = 0; i < mushrooms.length; i += 1) {
+                const mushroom = mushrooms[i];
+
+                if (!mushroom.dead && !mushroom.gone) {
+                    if (playerDead || playerDying || playerGone) {
+                        mushroom.state = 'idle';
+                        mushroom.walkTimer = 0;
+                        mushroom.walkFlip = false;
+                    } else if (mushroom.spawnDrop) {
+                        mushroom.y -= 2.6;
+                        if (mushroom.y <= 0) {
+                            mushroom.y = 0;
+                            mushroom.spawnDrop = false;
+                        }
+                    } else {
+                        const charCenterX = (charLeft + charRight) / 2;
+                        const mushroomCenterX = mushroom.x + (mushroomWidth / 2);
+                        const toPlayer = charCenterX - mushroomCenterX;
+
+                        if (Math.abs(toPlayer) <= mushroomSightRange) {
+                            mushroom.state = 'chase';
+                            mushroom.facing = toPlayer >= 0 ? 1 : -1;
+                            mushroom.x += Math.sign(toPlayer || 1) * mushroomChaseSpeed;
+                            mushroom.walkTimer += dt;
+                            if (mushroom.walkTimer >= mushroomWalkFlipInterval) {
+                                mushroom.walkTimer = 0;
+                                mushroom.walkFlip = !mushroom.walkFlip;
+                            }
+                        } else {
+                            mushroom.state = 'idle';
+                            mushroom.walkTimer = 0;
+                            mushroom.walkFlip = false;
+                        }
+                    }
+                }
+
+                if (mushroom.dead && !mushroom.gone) {
+                    mushroom.y -= mushroomDeathSinkSpeed;
+                    if (mushroom.y <= mushroomDeathEndY) {
+                        mushroom.y = mushroomDeathEndY;
+                        mushroom.gone = true;
+                    }
+                }
+            }
+
+            const pipeLeft = pipeX;
+            const pipeRight = pipeX + pipeWidth;
+            const overlapX = Math.min(charRight, pipeRight) - Math.max(charLeft, pipeLeft);
+            const hasPipeSupport = overlapX > 28;
+
+            let hitPlatformBottom = false;
+
+            if (!luckBlockUsed && jumping && velY < 0) {
+                const luckBlockX = platforms[0].x + tileSize;
+                const luckBlockY = platforms[0].y;
+                const luckOverlap = Math.min(charRight, luckBlockX + tileSize) - Math.max(charLeft, luckBlockX);
+                const prevHeadY = prevCharY + charHeadOffset;
+                const headY = charY + charHeadOffset;
+                const hitLuckFromBottom = luckOverlap > 18 && prevHeadY < luckBlockY && headY >= luckBlockY;
+
+                if (hitLuckFromBottom) {
+                    hitPlatformBottom = true;
+                    luckBlockUsed = true;
+                    luckBlock.classList.add('used');
+                    charY = luckBlockY - charHeadOffset - 2;
+                    velY = 1.2;
+
+                    if (Math.random() < 0.5) {
+                        blockBurgerX = luckBlockX + 2;
+                        blockBurgerY = luckBlockY + tileSize + 18;
+                        blockBurgerVisible = true;
+                        blockBurgerCollected = false;
+                        showMessage('burger spawned');
+                    } else {
+                        const bonusMushroom = mushrooms[3];
+                        bonusMushroom.x = luckBlockX + 2;
+                        bonusMushroom.y = luckBlockY + tileSize + 6;
+                        bonusMushroom.state = 'idle';
+                        bonusMushroom.facing = 1;
+                        bonusMushroom.walkTimer = 0;
+                        bonusMushroom.walkFlip = false;
+                        bonusMushroom.spawnDrop = true;
+                        bonusMushroom.dead = false;
+                        bonusMushroom.gone = false;
+                        showMessage('mushroom spawned');
+                    }
+                }
+            }
+
+            if (!hitPlatformBottom && jumping && velY < 0) {
+                const prevHeadY = prevCharY + charHeadOffset;
+                const headY = charY + charHeadOffset;
+                for (let i = 0; i < platforms.length; i += 1) {
+                    const platform = platforms[i];
+                    const overlapWithPlatform = Math.min(charRight, platform.x + platform.width) - Math.max(charLeft, platform.x);
+                    const hitFromBelow = overlapWithPlatform > platformSupportOverlap && prevHeadY < platform.y && headY >= platform.y;
+                    if (hitFromBelow) {
+                        charY = platform.y - charHeadOffset - 2;
+                        velY = 1.2;
+                        break;
+                    }
+                }
+            }
+
+            if (onPipe && !hasPipeSupport) {
+                onPipe = false;
+                pipeStandTime = 0;
+                if (!jumping) {
+                    jumping = true;
+                    velY = 0;
+                }
+            }
+
+            if (jumping && velY > 0 && prevCharY > pipeHeight && charY <= pipeHeight && hasPipeSupport) {
+                charY = pipeHeight;
+                velY = 0;
+                jumping = false;
+                onPipe = true;
+                onPlatformIndex = -1;
+                pipeDescending = false;
+                pipeStandTime = 0;
+                if (!levelCompleted) {
+                    levelCompleted = true;
+                    showMessage('you complited the level');
+                    setRestartVisible(true);
+                }
+            }
+
+            if (onPipe) {
+                charY = pipeHeight;
+                const charCenterX = (charLeft + charRight) / 2;
+                const pipeCenterX = (pipeLeft + pipeRight) / 2;
+                const centeredOnPipe = Math.abs(charCenterX - pipeCenterX) <= pipeCenterTolerance;
+                if (centeredOnPipe) {
+                    pipeStandTime += dt;
+                } else {
+                    pipeStandTime = 0;
+                }
+                if (pipeStandTime >= 350) {
+                    pipeDescending = true;
+                    onPipe = false;
+                    pipeStandTime = 0;
+                }
+            }
+
+            if (pipeDescending) {
+                charY -= pipeSinkSpeed;
+                if (charY <= pipeSinkEndY) {
+                    charY = pipeSinkEndY;
+                    pipeDescending = false;
+                    enteredPipe = true;
+                    setFinishVisible(true);
+                }
+            }
+
+            if (!burgerCollected && !playerDead && !enteredPipe) {
+                const burgerLeft = burgerX;
+                const burgerRight = burgerX + burgerWidth;
+                const burgerTop = burgerY + burgerHeight;
+                const overlapWithBurger = Math.min(charRight, burgerRight) - Math.max(charLeft, burgerLeft);
+                const touchesBurger = overlapWithBurger > 18 && charBottom < burgerTop && charTop > burgerY;
+                if (touchesBurger) {
+                    burgerCollected = true;
+                    burgersCount += 1;
+                    showMessage('burger collected');
+                    updateHud();
+                }
+            }
+
+            if (!burger2Collected && !playerDead && !enteredPipe) {
+                const burgerLeft = burger2X;
+                const burgerRight = burger2X + burgerWidth;
+                const burgerTop = burger2Y + burgerHeight;
+                const overlapWithBurger = Math.min(charRight, burgerRight) - Math.max(charLeft, burgerLeft);
+                const touchesBurger = overlapWithBurger > 18 && charBottom < burgerTop && charTop > burger2Y;
+                if (touchesBurger) {
+                    burger2Collected = true;
+                    burgersCount += 1;
+                    showMessage('burger collected');
+                    updateHud();
+                }
+            }
+
+            if (blockBurgerVisible && !blockBurgerCollected && !playerDead && !enteredPipe) {
+                const burgerLeft = blockBurgerX;
+                const burgerRight = blockBurgerX + burgerWidth;
+                const burgerTop = blockBurgerY + burgerHeight;
+                const overlapWithBurger = Math.min(charRight, burgerRight) - Math.max(charLeft, burgerLeft);
+                const touchesBurger = overlapWithBurger > 18 && charBottom < burgerTop && charTop > blockBurgerY;
+                if (touchesBurger) {
+                    blockBurgerCollected = true;
+                    burgersCount += 1;
+                    showMessage('burger collected');
+                    updateHud();
+                }
+            }
+
+            for (let i = 0; i < mushrooms.length; i += 1) {
+                const mushroom = mushrooms[i];
+                if (!mushroom.dead && !mushroom.gone && !playerDead && !enteredPipe) {
+                    const mushroomLeft = mushroom.x;
+                    const mushroomRight = mushroom.x + mushroomWidth;
+                    const mushroomTop = mushroom.y + mushroomHeight;
+                    const overlapWithMushroom = Math.min(charRight, mushroomRight) - Math.max(charLeft, mushroomLeft);
+                    const touchingMushroom = overlapWithMushroom > 18 && charBottom < mushroomTop && charTop > mushroom.y;
+                    const stompedMushroom = jumping && velY > 0 && overlapWithMushroom > 24 && prevCharY > (mushroomTop - 8) && charY <= mushroomTop;
+
+                    if (stompedMushroom) {
+                        mushroom.dead = true;
+                        mushroom.state = 'dead';
+                        mushroom.walkTimer = 0;
+                        mushroom.walkFlip = false;
+                        mushroomsDefeated += 1;
+                        charY = mushroomTop;
+                        velY = -10;
+                        updateHud();
+                    } else if (touchingMushroom) {
+                        triggerGameOver();
+                    }
+                }
+            }
+
+            container.classList.toggle('behind-pipe', pipeDescending);
+            container.classList.toggle('hidden', enteredPipe || playerGone);
+            container.style.bottom = `calc(${groundBottom}% + ${charY}px)`;
+
+            if (playerDead || playerDying || playerGone) {
+                character.style.backgroundImage = "url('dead.png')";
+            } else if (jumping) {
+                character.style.backgroundImage = "url('jump.png')";
+            } else if (moving) {
+                frameTimer += dt;
+                if (frameTimer >= frameInterval) {
+                    frameTimer = 0;
+                    frameIndex = (frameIndex + 1) % walkFrames.length;
+                }
+                character.style.backgroundImage = `url('${walkFrames[frameIndex]}')`;
+            } else {
+                frameTimer = 0;
+                character.style.backgroundImage = "url('chill.png')";
+            }
+
+            character.style.transform = direction === -1 ? 'scaleX(-1)' : 'scaleX(1)';
+            for (let i = 0; i < platforms.length; i += 1) {
+                updatePlatformVisual(platforms[i]);
+            }
+            for (let i = 0; i < mushrooms.length; i += 1) {
+                updateMushroomVisual(mushrooms[i]);
+            }
+            updateBurgerVisual();
+
+            requestAnimationFrame(loop);
+        }
+
+        requestAnimationFrame(loop);
+    </script>
+</body>
+</html>

@@ -1,0 +1,238 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I didnt do my homework coz...</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --accent: #238636;
+            --text-color: #c9d1d9;
+            --font-mono: 'Fira Code', 'Courier New', monospace;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-mono);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid #30363d;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        h1 {
+            font-size: 1.2rem;
+            color: #FF69B4;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .handwriting {
+            position: absolute;
+            left: 20px;
+            top: 40%;
+            transform: translateY(-50%) rotate(-8deg);
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            font-size: 1.5rem;
+            color: #FF69B4;
+            font-style: italic;
+            text-align: left;
+            line-height: 1.8;
+            font-weight: bold;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            width: 100%;
+        }
+
+        button {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 30px 60px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            transition: all 0.2s;
+            font-size: 1.75rem;
+        }
+
+        .btn-rainbow {
+            background: linear-gradient(90deg,
+                #FFB6D9, #FF69B4, #FF1493, #FF69B4,
+                #FFB6D9, #FFC0CB, #FF69B4);
+            background-size: 200% 200%;
+            animation: rainbow-shift 3s ease infinite;
+        }
+
+        .btn-rainbow:hover {
+            background-position: 200% 0;
+            transform: translateY(-2px);
+        }
+
+        @keyframes rainbow-shift {
+            0% { background-position: 0% 0; }
+            50% { background-position: 100% 0; }
+            100% { background-position: 0% 0; }
+        }
+
+        textarea {
+            background-color: #1a1f26;
+            color: #FF69B4;
+            border: 2px solid #FF69B4;
+            padding: 10px;
+            border-radius: 8px;
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            resize: none;
+            min-height: 120px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 2rem;
+        }
+
+        textarea::placeholder {
+            color: #FF69B4;
+            opacity: 0.6;
+        }
+
+        .input-group {
+            position: absolute;
+            left: 20px;
+            top: 60%;
+            width: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .input-group .submit-btn {
+            padding: 6px 12px;
+            font-size: 1rem;
+            color: #FF69B4;
+            background: #1a1f26;
+            border: 2px solid #FF69B4;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            background: var(--accent);
+            padding: 10px 20px;
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+    </style>
+</head>
+<body>
+
+<div class="handwriting">got any better<br>reasons? let me<br>know meow ;)</div>
+
+<div class="container">
+    <h1>I didnt do my homework coz...</h1>
+    
+    <div id="excuse-display">
+        <span id="excuse-text"></span>
+    </div>
+
+    <p style="color: #FF69B4; font-size: 1.1rem; margin: 1rem 0;">i honestly dgaf about school xD</p>
+
+    <div class="buttons">
+        <button class="btn-rainbow" onclick="generateExcuse()">reasons</button>
+    </div>
+
+    <div class="input-group">
+        <textarea id="extras" placeholder="got a better excuse? tell me here..."></textarea>
+        <button id="submitBtn" class="submit-btn">submit</button>
+    </div>
+
+
+
+</div>
+
+<div id="toast" class="toast">Copied!</div>
+
+<script>
+    const jokes = [
+        "My dog ate my homework... then my homework ate my dog. It was chaos.",
+        "I was going to do it, but then I realized I don't exist in this dimension.",
+        "My pen went on strike demanding better working conditions.",
+        "I got stuck in a loop where I kept opening Reddit instead of the homework file.",
+        "My keyboard decided to unionize and refused to cooperate.",
+        "A mysterious wizard appeared and turned all my homework into confetti.",
+        "I was abducted by aliens for educational purposes—they taught me different material.",
+        "My homework caught fire, so I figured the ashes told a better story anyway.",
+        "Gravity reversed in my room for 3 hours. Everything floated away, including motivation.",
+        "My brain went into sleep mode and forgot the password to wake up.",
+        "I tried, but my pencil was on a spiritual journey and wouldn't return.",
+        "The homework was written in invisible ink. I couldn't see it, so I couldn't do it.",
+        "A time traveler told me the homework never actually existed in my timeline.",
+        "My desk grew legs and walked away with the assignment still on it.",
+        "I was too busy negotiating with my pillow to stay comfortable.",
+        "The wifi pretended the homework didn't exist, so I believed it.",
+        "My phone battery hit 0% and took my willpower with it.",
+        "An existential crisis occurred—what even is homework, really?",
+        "My cat sat on the keyboard and apparently sabotaged my work ethic.",
+        "I decided to become a procrastination artist instead. The deadline was my masterpiece.",
+        "The trees outside were so lush I forgot what paper was.",
+        "My thoughts were traveling at the speed of light away from the homework.",
+        "I accidentally entered the Twilight Zone where homework doesn't exist.",
+        "My motivation called in sick. We're waiting for it to recover.",
+        "I was hosting a very important meeting with my snacks."
+    ];
+
+    function generateExcuse() {
+        const joke = jokes[Math.floor(Math.random() * jokes.length)];
+        document.getElementById('excuse-text').innerText = joke;
+    }
+
+    function copyExcuse() {
+        const text = document.getElementById('excuse-text').innerText;
+        navigator.clipboard.writeText(text).then(() => {
+            const toast = document.getElementById('toast');
+            toast.style.opacity = '1';
+            setTimeout(() => { toast.style.opacity = '0'; }, 2000);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('submitBtn').addEventListener('click', () => {
+            const extra = document.getElementById('extras').value;
+            alert(extra.trim() ? 'Thanks for your reason: ' + extra : 'Please type something first!');
+        });
+
+    });
+</script>
+
+</body>
+</html>
