@@ -1,0 +1,627 @@
+/* ==========================================
+   TURVAMEES - LIIKUMISE TUVASTAJA
+   CSS STIILID
+   ========================================== */
+
+/* ÜLDISED STIILID */
+:root {
+  --primary-color: #2c3e50;
+  --secondary-color: #3498db;
+  --danger-color: #e74c3c;
+  --success-color: #27ae60;
+  --warning-color: #f39c12;
+  --light-bg: #ecf0f1;
+  --dark-bg: #1a1a1a;
+  --text-color: #2c3e50;
+  --light-text: #ffffff;
+  --border-radius: 8px;
+  --transition: all 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: var(--text-color);
+  min-height: 100vh;
+  transition: background var(--transition);
+}
+
+/* ÖINE REŽIIM */
+body.night-mode {
+  background: #0a0a0a;
+  color: var(--light-text);
+}
+
+/* VAIKNE REŽIIM */
+body.quiet-mode {
+  opacity: 0.95;
+}
+
+/* ==========================================
+   NAVIGATSIOONI RIBA
+   ========================================== */
+
+.navbar {
+  background: rgba(44, 62, 80, 0.9);
+  color: white;
+  padding: 1rem 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  transition: color var(--transition);
+  font-weight: 500;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--secondary-color);
+}
+
+/* ==========================================
+   KONTEINERI JA JAOTISED
+   ========================================== */
+
+.container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.header-section {
+  background: white;
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  text-align: center;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.header-section h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
+}
+
+.header-section p {
+  font-size: 1.1rem;
+  color: #7f8c8d;
+}
+
+/* ==========================================
+   KAAMERA JA JUHTIMISE PANEELI
+   ========================================== */
+
+.camera-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.camera-container {
+  position: relative;
+  background: #000;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.video-canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: #000;
+  min-height: 450px;
+}
+
+/* LIIKUMISE INDIKAATOR */
+.motion-indicator {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  background: rgba(0, 0, 0, 0.7);
+  color: #27ae60;
+  padding: 0.75rem 1rem;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: bold;
+  z-index: 10;
+}
+
+.motion-indicator.active {
+  color: #e74c3c;
+  background: rgba(231, 76, 60, 0.2);
+}
+
+.indicator-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #27ae60;
+  animation: pulse 1s infinite;
+}
+
+.motion-indicator.active .indicator-dot {
+  background: #e74c3c;
+  animation: pulse-fast 0.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes pulse-fast {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.2);
+  }
+}
+
+/* JÕUDLUSE NÄITAJA */
+.performance-stats {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.7);
+  color: #3498db;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  z-index: 10;
+}
+
+/* ==========================================
+   JUHTIMISE PANEELI
+   ========================================== */
+
+.control-panel {
+  background: white;
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.control-group {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.control-group:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.control-group h3 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+}
+
+/* ==========================================
+   NUPUD
+   ========================================== */
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: var(--transition);
+  margin: 0.5rem 0.5rem 0.5rem 0;
+}
+
+.btn-primary {
+  background: var(--secondary-color);
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+}
+
+.btn-danger {
+  background: var(--danger-color);
+  color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #c0392b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+}
+
+.btn-secondary {
+  background: #bdc3c7;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #95a5a6;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.button-group {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* ==========================================
+   KONTROLLIDE GRUPID
+   ========================================== */
+
+.checkbox-group {
+  margin: 1rem 0;
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.volume-control,
+.sensitivity-control {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.volume-control label,
+.sensitivity-control label {
+  font-weight: 600;
+  min-width: 120px;
+}
+
+#volumeSlider,
+#sensitivitySlider {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: #ddd;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+#volumeSlider::-webkit-slider-thumb,
+#sensitivitySlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--secondary-color);
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#volumeSlider::-moz-range-thumb,
+#sensitivitySlider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--secondary-color);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#volumeValue,
+#sensitivityValue {
+  min-width: 50px;
+  text-align: right;
+  font-weight: bold;
+  color: var(--secondary-color);
+}
+
+/* ==========================================
+   HELIDE VALIMINE
+   ========================================== */
+
+.sound-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sound-option {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sound-option label {
+  min-width: 140px;
+  font-weight: 600;
+}
+
+.sound-option select {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #bdc3c7;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* ==========================================
+   OMADUSTE JAOTIS
+   ========================================== */
+
+.features-section {
+  background: white;
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.features-section h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--primary-color);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.feature-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: var(--transition);
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.feature-card h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.feature-card p {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+/* ==========================================
+   INFO JAOTIS
+   ========================================== */
+
+.info-section {
+  background: white;
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.info-section h2 {
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+}
+
+#appInfo {
+  background: #ecf0f1;
+  padding: 1rem;
+  border-radius: 6px;
+  line-height: 1.8;
+}
+
+/* ==========================================
+   JALUS
+   ========================================== */
+
+.footer {
+  background: rgba(44, 62, 80, 0.95);
+  color: white;
+  padding: 2rem;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-content a {
+  color: var(--secondary-color);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+.footer-content a:hover {
+  color: #2980b9;
+  text-decoration: underline;
+}
+
+/* ==========================================
+   REAGEERIV DISAIN
+   ========================================== */
+
+@media (max-width: 768px) {
+  .camera-section {
+    grid-template-columns: 1fr;
+  }
+
+  .navbar-container {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .nav-links {
+    gap: 1rem;
+  }
+
+  .header-section h2 {
+    font-size: 1.5rem;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .button-group {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .sound-selector {
+    flex-direction: column;
+  }
+
+  .sound-option {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .sound-option label {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 0.5rem;
+  }
+
+  .navbar-title {
+    font-size: 1.2rem;
+  }
+
+  .header-section {
+    padding: 1rem;
+  }
+
+  .header-section h2 {
+    font-size: 1.3rem;
+  }
+
+  .control-panel {
+    padding: 1rem;
+  }
+
+  .features-section,
+  .info-section {
+    padding: 1rem;
+  }
+
+  .feature-card {
+    padding: 1rem;
+  }
+
+  .feature-card h3 {
+    font-size: 1rem;
+  }
+
+  .feature-card p {
+    font-size: 0.85rem;
+  }
+}
+
+/* ==========================================
+   KUSTOM STIILID REŽIIMIDE JAOKS
+   ========================================== */
+
+body.night-mode {
+  background: #0a0a0a;
+}
+
+body.night-mode .navbar {
+  background: rgba(20, 20, 20, 0.9);
+}
+
+body.night-mode .header-section,
+body.night-mode .control-panel,
+body.night-mode .features-section,
+body.night-mode .info-section {
+  background: #1a1a1a;
+  color: white;
+}
+
+body.night-mode .control-group {
+  border-bottom-color: #333;
+}
+
+body.night-mode #appInfo {
+  background: #2a2a2a;
+  color: white;
+}
+
+body.night-mode .sound-option select {
+  background: #2a2a2a;
+  color: white;
+  border-color: #444;
+}
+
+body.quiet-mode .motion-indicator,
+body.quiet-mode .performance-stats {
+  display: none;
+}

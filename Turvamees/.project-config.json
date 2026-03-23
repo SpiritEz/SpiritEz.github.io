@@ -1,0 +1,20 @@
+{
+  "name": "TURVAMEES",
+  "version": "1.0.0",
+  "description": "Reaalajaline liikumise tuvastamise rakendus Node.js-i abil",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/turvamees.git"
+  },
+  "keywords": [
+    "motion-detection",
+    "camera",
+    "security",
+    "node",
+    "express",
+    "webcam",
+    "real-time"
+  ],
+  "author": "Your Name <your@email.com>",
+  "license": "MIT"
+}

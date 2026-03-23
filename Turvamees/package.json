@@ -1,0 +1,25 @@
+{
+  "name": "turvamees",
+  "version": "1.0.0",
+  "description": "Kaamerate liikumise tuvastamise rakendu me helide ja häiretega",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "keywords": [
+    "camera",
+    "motion-detection",
+    "security",
+    "node"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

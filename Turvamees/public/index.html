@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TURVAMEES - Liikumise Tuvastaja</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <!-- NAVIGATSIOONI RIBA -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <h1 class="navbar-title">🛡️ TURVAMEES</h1>
+            <div class="nav-links">
+                <a href="/" class="nav-link active">Kodu</a>
+                <a href="#features" class="nav-link">Omadused</a>
+                <a href="https://github.com/yourusername/turvamees" target="_blank" class="nav-link">GitHub</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- PEALKIRJAD JA TEABE JAOTIS -->
+        <section class="header-section">
+            <h2>Teretulnud TURVAMEES-i!</h2>
+            <p>Reaalajaline liikumise tuvastamise süsteem kaamerate abil</p>
+        </section>
+
+        <!-- KAAMERAPILT JA JUHTIMISE PANEELI -->
+        <section class="camera-section">
+            <div class="camera-container">
+                <!-- KAAMERAPILT CANVAS -->
+                <canvas id="videoCanvas" class="video-canvas"></canvas>
+                <video id="videoElement" style="display: none;"></video>
+
+                <!-- LIIKUMISE TUVASTAMISE INDIKAATOR -->
+                <div class="motion-indicator" id="motionIndicator">
+                    <span class="indicator-dot"></span>
+                    Liikumist ei tuvastata
+                </div>
+
+                <!-- FPS JA JÕUDLUSE NÄITAJA -->
+                <div class="performance-stats" id="performanceStats">
+                    <div>FPS: <span id="fpsCounter">0</span></div>
+                    <div>Objektid: <span id="objectCount">0</span></div>
+                </div>
+            </div>
+
+            <!-- JUHTIMISE PANEELI -->
+            <div class="control-panel">
+                <div class="control-group">
+                    <h3>📹 Kaamera</h3>
+                    <button id="startBtn" class="btn btn-primary">Käivita kaamera</button>
+                    <button id="stopBtn" class="btn btn-danger" disabled>Peata kaamera</button>
+                </div>
+
+                <!-- HÄIRE SEADED -->
+                <div class="control-group">
+                    <h3>🔔 Häiresignaal</h3>
+                    <div class="checkbox-group">
+                        <label>
+                            <input type="checkbox" id="soundToggle" checked>
+                            Helid sisse lülitatud
+                        </label>
+                    </div>
+                    <div class="volume-control">
+                        <label for="volumeSlider">Helitugevus:</label>
+                        <input type="range" id="volumeSlider" min="0" max="100" value="50">
+                        <span id="volumeValue">50%</span>
+                    </div>
+                </div>
+
+                <!-- LIIKUMISE TUNDLIKKUS -->
+                <div class="control-group">
+                    <h3>⚙️ Seaded</h3>
+                    <div class="sensitivity-control">
+                        <label for="sensitivitySlider">Liikumise tundlikkus:</label>
+                        <input type="range" id="sensitivitySlider" min="1" max="100" value="30">
+                        <span id="sensitivityValue">30%</span>
+                    </div>
+                </div>
+
+                <!-- HÄIRE HELIDE VALIK -->
+                <div class="control-group">
+                    <h3>🎵 Häire helid</h3>
+                    <div class="sound-selector">
+                        <div class="sound-option">
+                            <label>Liikumine edasi:</label>
+                            <select id="soundForward">
+                                <option value="beep">Beep</option>
+                                <option value="alarm">Häire</option>
+                                <option value="bell">Kell</option>
+                            </select>
+                        </div>
+                        <div class="sound-option">
+                            <label>Liikumine tagasi:</label>
+                            <select id="soundBackward">
+                                <option value="alarm" selected>Häire</option>
+                                <option value="beep">Beep</option>
+                                <option value="bell">Kell</option>
+                            </select>
+                        </div>
+                        <div class="sound-option">
+                            <label>Liikumine küljele:</label>
+                            <select id="soundSide">
+                                <option value="beep">Beep</option>
+                                <option value="bell" selected>Kell</option>
+                                <option value="alarm">Häire</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DISEENI REŽIIMID -->
+                <div class="control-group">
+                    <h3>🌙 Režiimid</h3>
+                    <div class="button-group">
+                        <button class="btn btn-secondary mode-btn" data-mode="normal">Normaalne</button>
+                        <button class="btn btn-secondary mode-btn" data-mode="night">Ö</button>
+                        <button class="btn btn-secondary mode-btn" data-mode="quiet">Vaikne</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- OMADUSTE JAOTIS -->
+        <section class="features-section" id="features">
+            <h2>🎯 10 Lahedat Omadust</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>🎥 Reaalajaline kaamera</h3>
+                    <p>Otsene video stream internetti brauserisse</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🚨 Liikumise tuvastamine</h3>
+                    <p>Hüpja täpsus objektide liikumise detekteerimiseks</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔊 Kohandatavad helid</h3>
+                    <p>Eri helid erinevate liikumiste jaoks</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🎨 Öine režiim</h3>
+                    <p>Infrared režiim ja heledale kasutatavate vidinate kohta</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔇 Vaikne režiim</h3>
+                    <p>Helide järjestik, kuid visuaalse näitaja näitamine</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📊 Liikumise statistika</h3>
+                    <p>Vaata kuhu objektid liiguvad ja kui tihti</p>
+                </div>
+                <div class="feature-card">
+                    <h3>⚙️ Seadistused</h3>
+                    <p>Kalibreerige tundlikkust ja reaktsioonikiirust</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🎚️ Helitugevuse kontroll</h3>
+                    <p>Reguleerige häire helide tugevust teile sobivaks</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📱 Reageeriv disain</h3>
+                    <p>Töötab pöördseadmetel ja suurekaranul ekraanidel</p>
+                </div>
+                <div class="feature-card">
+                    <h3>💾 Andmete säilitamine</h3>
+                    <p>Salvestage liikumise logid kohalikult (localStorage)</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- INFO JAOTIS -->
+        <section class="info-section">
+            <h2>ℹ️ Rakenduse teave</h2>
+            <div id="appInfo"></div>
+        </section>
+    </main>
+
+    <!-- JALUS -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 TURVAMEES - Liikumise Tuvastaja. Kõik õigused kaitstud.</p>
+            <p>
+                <a href="https://github.com/yourusername/turvamees" target="_blank">GitHub</a> |
+                <a href="/portfolio" target="_blank">Portfoolio</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- SKRIPTID -->
+    <!-- Liikumise tuvastamise skript -->
+    <script src="/js/motion-detection.js"></script>
+    
+    <!-- Liikumise logimise skript -->
+    <script src="/js/motion-logger.js"></script>
+    
+    <!-- Peamisevrakenduse loogika -->
+    <script src="/js/app.js"></script>
+</body>
+</html>

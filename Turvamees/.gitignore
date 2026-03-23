@@ -1,0 +1,52 @@
+# ==========================================
+# .GITIGNORE - TURVAMEES
+# Failid ja kaustad, mida ei salvestata GitHubisse
+# ==========================================
+
+# Node.js
+node_modules/
+npm-debug.log
+npm-debug.log.*
+yarn-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# OS failid
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Keskkonna muutujad
+.env
+.env.local
+.env.*.local
+
+# Ajutised failid
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+
+# Logid
+logs/
+*.log
+
+# Kohalik salvestamine
+.vscode-settings.json
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Ehitus
+dist/
+build/
+
+# Silumine
+.debug
+debug.log
