@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f4ecd2"/>
+      <stop offset="1" stop-color="#fff4d8"/>
+    </linearGradient>
+    <radialGradient id="fur" cx="50%" cy="44%" r="62%">
+      <stop offset="0" stop-color="#f2d8b0"/>
+      <stop offset="1" stop-color="#c7ae8d"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="800" height="560" fill="url(#bg)"/>
+  <ellipse cx="400" cy="470" rx="270" ry="38" fill="#5b4a2d20"/>
+
+  <path d="M252 174 L326 226 L260 248 Z" fill="#bda488"/>
+  <path d="M548 174 L474 226 L540 248 Z" fill="#bda488"/>
+  <path d="M274 184 L320 218 L280 234 Z" fill="#ead6be"/>
+  <path d="M526 184 L480 218 L520 234 Z" fill="#ead6be"/>
+
+  <ellipse cx="400" cy="306" rx="194" ry="156" fill="url(#fur)"/>
+  <ellipse cx="400" cy="334" rx="116" ry="96" fill="#f6ede0"/>
+
+  <path d="M270 298 C314 272, 352 274, 384 300" stroke="#a58a6f" stroke-width="10" fill="none" stroke-linecap="round"/>
+  <path d="M530 298 C486 272, 448 274, 416 300" stroke="#a58a6f" stroke-width="10" fill="none" stroke-linecap="round"/>
+
+  <ellipse cx="336" cy="266" rx="33" ry="36" fill="#ffffff"/>
+  <ellipse cx="464" cy="266" rx="33" ry="36" fill="#ffffff"/>
+  <ellipse cx="336" cy="270" rx="13" ry="15" fill="#37271d"/>
+  <ellipse cx="464" cy="270" rx="13" ry="15" fill="#37271d"/>
+  <circle cx="341" cy="264" r="4" fill="#fff"/>
+  <circle cx="469" cy="264" r="4" fill="#fff"/>
+
+  <path d="M384 314 L400 334 L416 314 Z" fill="#ed9b8f"/>
+  <path d="M400 334 Q374 358 346 348" stroke="#47372c" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M400 334 Q426 358 454 348" stroke="#47372c" stroke-width="6" fill="none" stroke-linecap="round"/>
+
+  <path d="M332 338 L258 330" stroke="#4b3d31" stroke-width="3" stroke-linecap="round"/>
+  <path d="M332 350 L248 352" stroke="#4b3d31" stroke-width="3" stroke-linecap="round"/>
+  <path d="M332 362 L258 374" stroke="#4b3d31" stroke-width="3" stroke-linecap="round"/>
+  <path d="M468 338 L542 330" stroke="#4b3d31" stroke-width="3" stroke-linecap="round"/>
+  <path d="M468 350 L552 352" stroke="#4b3d31" stroke-width="3" stroke-linecap="round"/>
+  <path d="M468 362 L542 374" stroke="#4b3d31" stroke-width="3" stroke-linecap="round"/>
+</svg>

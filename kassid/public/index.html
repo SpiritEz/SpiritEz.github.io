@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cats in Cards</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="container">
+    <p class="label">NODE.JS + API DEMO</p>
+    <h1>Cats in Cards</h1>
+    <p class="subtitle">The Node.js server fetches data from The Cat API and sends it to the frontend.</p>
+
+    <section class="toolbar">
+      <button id="refreshBtn" class="btn primary">Show Other Cats</button>
+      <button id="loadMoreBtn" class="btn">Load More</button>
+      <button id="themeBtn" class="btn">Toggle Theme</button>
+      <button id="favoritesOnlyBtn" class="btn">Favorites Only: Off</button>
+      <button id="retryBtn" class="btn hidden">Retry</button>
+    </section>
+
+    <section class="filters">
+      <input id="searchInput" type="search" placeholder="Search by breed, origin or temperament..." aria-label="Search cats" />
+      <select id="sortSelect" aria-label="Sort cats">
+        <option value="default">Sort: Default</option>
+        <option value="breed-asc">Breed A-Z</option>
+        <option value="breed-desc">Breed Z-A</option>
+        <option value="origin-asc">Origin A-Z</option>
+      </select>
+    </section>
+
+    <div id="errorBox" class="error hidden" role="alert"></div>
+
+    <section class="stats" aria-live="polite">
+      <p>Cards found: <span id="cardsCount">0</span></p>
+      <p>Favorites: <span id="favoritesCount">0</span></p>
+    </section>
+
+    <section id="cardsContainer" class="cards" aria-live="polite"></section>
+  </main>
+
+  <template id="cardTemplate">
+    <article class="card">
+      <div class="image-wrap">
+        <img class="cat-image" alt="Cat photo" loading="lazy" />
+      </div>
+      <div class="card-content">
+        <h3 class="breed"></h3>
+        <p><strong>Origin:</strong> <span class="origin"></span></p>
+        <p><strong>Temperament:</strong> <span class="temperament"></span></p>
+        <p><strong>Life span:</strong> <span class="lifespan"></span></p>
+        <div class="actions">
+          <button class="favorite-btn btn small" type="button">☆ Favorite</button>
+          <a class="wiki-link btn small" target="_blank" rel="noreferrer noopener">Wikipedia</a>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
