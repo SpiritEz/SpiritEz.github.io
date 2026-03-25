@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dungeon Dash</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="game-shell">
+      <header class="hud">
+        <div class="hud-item">Level: <span id="levelValue">1</span></div>
+        <div class="hud-item">HP: <span id="hpValue">5</span></div>
+        <div class="hud-item">Enemies: <span id="enemyValue">0</span></div>
+        <div class="hud-item">Upgrade: <span id="upgradeValue">None</span></div>
+      </header>
+
+      <section class="arena-wrap">
+        <canvas id="gameCanvas" width="900" height="540"></canvas>
+        <div id="overlay" class="overlay show">
+          <h1 id="overlayTitle">Dungeon Dash</h1>
+          <p id="overlayText">WASD to move, Space to attack. Defeat every villain to unlock the next level.</p>
+          <div id="menuButtons" class="menu-buttons">
+            <button id="playButton" class="menu-btn" type="button">Play</button>
+            <button id="charactersButton" class="menu-btn" type="button">Characters</button>
+            <button id="continueButton" class="menu-btn" type="button">Continue</button>
+          </div>
+          <div id="playerPicker" class="player-picker"></div>
+          <button id="actionButton">Start Game</button>
+        </div>
+      </section>
+
+      <footer class="tips">
+        <p>Controls: Move to face a direction, then press Space to slash in front of you.</p>
+      </footer>
+      <p id="combatHint" class="combat-hint">Tip: stand close and face the villain before pressing Space.</p>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
